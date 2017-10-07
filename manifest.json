@@ -9,28 +9,13 @@
   },
   "default_locale": "en",
   "background": {
-    "scripts": [
-      "scripts/background.js"
-    ]
+    "scripts": [  "scripts/background.js" ],
+    "persistent": false
   },
   "permissions": [
+    "declarativeContent",
     "tabs",
-    "storage",
-    "http://*/*",
-    "https://*/*"
-  ],
-  "content_scripts": [
-    {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "scripts/contentscript.js"
-      ],
-      "run_at": "document_end",
-      "all_frames": false
-    }
+    "*://hxtools.github.io/*/**"
   ],
   "page_action": {
     "default_icon": {

@@ -128,9 +128,6 @@ function mergeAll(dest) {
 function buildJS(target) {
   const files = [
     'background.js',
-    'contentscript.js',
-    'report.js',
-    'popup.js',
     'livereload.js'
   ]
 
