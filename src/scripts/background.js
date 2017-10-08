@@ -1,76 +1,83 @@
 import ext from "./utils/ext";
 
-var sourceUrl = 'https://hxtools.github.io/source/filtered_url.json'
-var filteredDomains;
+var sourceUrl = 'https://hxtools.github.io/source/data.json'
+var data;
 
 var fetchData = () => {
-  var xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    var xhr = new XMLHttpRequest();
 
-  xhr.open("GET", sourceUrl, false);
-  xhr.send();
+    xhr.open("GET", sourceUrl, false);
+    xhr.send();
 
-  var result = xhr.responseText;
+    var result = xhr.responseText;
 
-  filteredDomains = result;
+    resolve(JSON.parse(result));
+  });
 }
 
-var domainCheck = (activeDomain) => {
-  console.log(filteredDomains);
 
-  if (activeDomain === 'www.facebook.com' || activeDomain === 'twitter.com') {
-    // do profile check
-  } else {
-    var found = filteredDomains.find(domain => domain.url === activeDomain)
+var domainCheck = (tab) => {
 
-    if (found !== undefined) {
-      ext.declarativeContent.ShowPageAction();
-    } else {
-      console.log('lolos');
+  return new Promise((resolve, reject) => {
+
+    // get data from git data source
+    fetchData().then( function(data) {
+
+      var url = new URL(tab.url)
+      var activeDomain = url.hostname
+
+      if (activeDomain === 'www.facebook.com' || activeDomain === 'twitter.com') {
+
+        // do profile check later
+        resolve('social-media');
+
+      } else {
+        var found = data.links.find(domain => domain.url.indexOf(activeDomain) > -1 )
+
+        if (found !== undefined) {
+
+          ext.pageAction.show(tab.id)
+          resolve(found);
+
+        } else {
+
+          resolve(null);
+        }
+      }
+
+    });
+  });
+}
+
+ext.tabs.onActivated.addListener( (activeInfo) => {
+
+  ext.tabs.get(activeInfo.tabId, (tab) => {
+
+    if (tab && tab.url) {
+      domainCheck(tab).then( function(data) {
+        if (data === 'social-media') {
+          ext.tabs.sendMessage(activeInfo.tabId, { "action": "show-notice"});
+        } else {
+          var info = Object.assign( { "action": "show-alert"}, data);
+          ext.tabs.sendMessage(activeInfo.tabId, info);
+        }
+      });
     }
-  }
-}
 
-
-ext.tabs.onActivated.addListener( async () => {
-
-  // get data from git data source
-  await fetchData();
-
-  // get url from activated tab
-  chrome.tabs.query({
-    active: true,
-    currentWindow: true
-  }, (tabs) => {
-    var tab = tabs[0];
-    var url = new URL(tab.url)
-    var domain = url.hostname
-
-    domainCheck(domain);
   });
 
 });
 
+ext.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
 
+  domainCheck(tab).then( function(data) {
+    if (data === 'social-media') {
+      ext.tabs.sendMessage(tabId, { "action": "show-notice"});
+    } else {
+      var info = Object.assign( { "action": "show-alert"}, data);
+      ext.tabs.sendMessage(tabId, info);
+    }
+  });
 
-
-
-// ext.runtime.onInstalled.addListener( async function() {
-
-//   let urlList = await fetchData;
-
-//   ext.declarativeContent.onPageChanged.removeRules(undefined, function() {
-//     ext.declarativeContent.onPageChanged.addRules([
-//       {
-//         // That fires when a page's URL contains a 'g' ...
-//         conditions: [
-//           new ext.declarativeContent.PageStateMatcher({
-//             pageUrl: { urlContains: 'g' },
-//           })
-//         ],
-//         // And shows the extension's page action.
-//         actions: [ new chrome.declarativeContent.ShowPageAction() ]
-//       }
-//     ]);
-//   });
-// });
-
+});

@@ -2,6 +2,7 @@
   "name": "__MSG_appName__",
   "version": "0.0.1",
   "manifest_version": 2,
+  "homepage_url": "https://hxtools.github.io/pinokio/",
   "description": "__MSG_appDescription__",
   "icons": {
     "16": "icons/icon-16.png",
@@ -12,6 +13,19 @@
     "scripts": [  "scripts/background.js" ],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "css": [
+        "styles/alert.css"
+      ],
+      "matches": [ "*://*/*" ],
+      "all_frames": true,
+      "js": [
+        "scripts/contentscript.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
   "permissions": [
     "declarativeContent",
     "tabs",
