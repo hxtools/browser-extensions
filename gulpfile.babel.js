@@ -129,6 +129,7 @@ function buildJS(target) {
   const files = [
     'contentscript.js',
     'background.js',
+    'sanitizer.js',
     'livereload.js'
   ]
 

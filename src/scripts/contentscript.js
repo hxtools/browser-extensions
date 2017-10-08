@@ -1,4 +1,5 @@
 import ext from "./utils/ext";
+var Sanitizer = require('./sanitizer.js');
 
 var alertCreatedStatus = false;
 
@@ -43,7 +44,7 @@ var showNotice = () => {
       var messageValue = '';
 
       messageValue += '<span class="icon-pinokio">🎗️</span>Bersikaplah Bijak dalam menggunakan Sosial Media.<br><strong>Alasan:</strong> Konten bersifat subjektif';
-      message.innerHTML = messageValue;
+      message.innerHTML = Sanitizer.escapeHTML(messageValue);
 
       var container = document.querySelector('.pinokio-alert');
       container.classList.add('show');
@@ -90,7 +91,7 @@ var showAlert = (info) => {
     var messageValue = '';
 
     messageValue += '<span class="icon-pinokio">🎗️</span>Halaman ini merupakan sumber informasi yang tidak terpercaya.<br>' + reason;
-    message.innerHTML = messageValue;
+    message.innerHTML = Sanitizer.escapeHTML(messageValue);
 
     var container = document.querySelector('.pinokio-alert');
     container.classList.add('show');
