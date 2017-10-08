@@ -10,7 +10,7 @@ All data managed by contributors, for dispute please raise an issue at [https://
 
 ## Changelog
 
-See [changelog](changelo.md)
+See [changelog](CHANGELOG.md)
 
 ## Development Contribution
 
