@@ -1,6 +1,6 @@
 {
   "name": "pinokio",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "filtered site which news/information is unreliable",
   "scripts": {
     "chrome-build": "cross-env TARGET=chrome gulp",
