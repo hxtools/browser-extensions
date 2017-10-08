@@ -4,6 +4,10 @@
 
 This project is using boilerplate from [https://github.com/EmailThis/extension-boilerplate](https://github.com/EmailThis/extension-boilerplate)
 
+## Data
+
+All data managed by contributor, for dispute please raise an issue at [https://github.com/hxtools/source/issues](https://github.com/hxtools/source/issues)
+
 ## Changelog
 
 See [changelog](changelo.md)
